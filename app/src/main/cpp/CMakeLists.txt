@@ -12,6 +12,7 @@ cmake_minimum_required( VERSION "${PROJECT_CMAKE_VERSION}" )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 set( PROJECT_NAME "AR-Diorama" )
+set( OUTPUT_NAME "ardiorama" )
 set( APP_VERSION 0.1.0 )
 set( PROJECT_DESCRIPTION "AR-Diorama app" )
 project( ${PROJECT_NAME} VERSION ${APP_VERSION} DESCRIPTION ${PROJECT_DESCRIPTION} LANGUAGES C CXX )
@@ -50,10 +51,10 @@ set( MY_APP_SOURCES "native-lib.cpp" )
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Add SHARED Library Object
-add_library( ${CMAKE_PROJECT_NAME} SHARED ${MY_APP_HEADERS} ${MY_APP_SOURCES} )
+add_library( ${OUTPUT_NAME} SHARED ${MY_APP_HEADERS} ${MY_APP_SOURCES} )
 
 # Link
-target_link_libraries( ${CMAKE_PROJECT_NAME}
+target_link_libraries( ${OUTPUT_NAME}
     android
     log
 )

@@ -3,6 +3,7 @@ package com.c0de4un.ardiorama
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import androidx.appcompat.app.AppCompatActivity
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         getPermission()
 
-        val handlerThread = HandlerThread("videoThread")
+        val handlerThread = HandlerThread("videoThread") // @TODO: FIX nullptr handlerThread = null
+        handlerThread.start()
         handler = Handler(handlerThread.looper)
 
         cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
@@ -98,6 +100,20 @@ class MainActivity : AppCompatActivity() {
 
                     val surfaceTexture = textureView.surfaceTexture
                     val surface = Surface(surfaceTexture)
+
+                    var captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                    captureRequest.addTarget(surface)
+
+                    cameraDevice.createCaptureSession(listOf(surface), object: CameraCaptureSession.StateCallback() {
+                        override fun onConfigured(session: CameraCaptureSession) {
+                            session.setRepeatingRequest(captureRequest.build(), null, null)
+                        }
+
+                        override fun onConfigureFailed(session: CameraCaptureSession) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }, handler)
                 }
 
                 override fun onDisconnected(camera: CameraDevice) {
